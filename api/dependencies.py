@@ -2,6 +2,8 @@ from fastapi import Depends, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JOSEError, jwt
 
+from api.database import SessionLocal
+
 security = HTTPBearer()
 
 
@@ -26,3 +28,11 @@ async def has_access(credentials: HTTPAuthorizationCredentials = Depends(securit
         raise HTTPException(status_code=401, detail=str(e))
 
     return payload
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

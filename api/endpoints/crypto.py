@@ -3,7 +3,7 @@ from typing import Optional
 import requests
 from fastapi import APIRouter
 
-router = APIRouter()
+router = APIRouter(tags=["crypto"])
 
 
 @router.get("/prices/{crypto}")

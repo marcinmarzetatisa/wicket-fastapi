@@ -71,10 +71,10 @@
         }
       }
     },
-    "AppLogGroup": {
+    "ApiLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/wicket-fastapi-dev-app"
+        "LogGroupName": "/aws/lambda/wicket-fastapi-dev-api"
       }
     },
     "IamRoleLambdaExecution": {
@@ -161,7 +161,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/wicket-fastapi/dev/1651025010497-2022-04-27T02:03:30.497Z/pythonRequirements.zip"
+          "S3Key": "serverless/wicket-fastapi/dev/1652211160891-2022-05-10T19:32:40.891Z/pythonRequirements.zip"
         },
         "LayerName": "requirements-layer",
         "Description": "Requirements",
@@ -170,18 +170,18 @@
         ]
       }
     },
-    "AppLambdaFunction": {
+    "ApiLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/wicket-fastapi/dev/1651026530458-2022-04-27T02:28:50.458Z/app.zip"
+          "S3Key": "serverless/wicket-fastapi/dev/1652273138077-2022-05-11T12:45:38.077Z/api.zip"
         },
         "Handler": "main.handler",
         "Runtime": "python3.8",
-        "FunctionName": "wicket-fastapi-dev-app",
+        "FunctionName": "wicket-fastapi-dev-api",
         "MemorySize": 1024,
         "Timeout": 6,
         "Environment": {
@@ -196,23 +196,24 @@
           ]
         },
         "Layers": [
+          "arn:aws:lambda:eu-central-1:188557514665:layer:psycopg239:2",
           {
             "Ref": "PythonRequirementsLambdaLayer"
           }
         ]
       },
       "DependsOn": [
-        "AppLogGroup"
+        "ApiLogGroup"
       ]
     },
-    "AppLambdaVersionQgXUo9fFpg116LmRNsKYIqKRol44P18oeLBkE8hkbE": {
+    "ApiLambdaVersionrazGLHg2aNvxPbVe2KmcVGts2H5EI4ZuFO8JhzG8": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
-          "Ref": "AppLambdaFunction"
+          "Ref": "ApiLambdaFunction"
         },
-        "CodeSha256": "qnll8rWi0JF9Drs9V+CRXiEPhC3sVIgpH0avFBflsC8="
+        "CodeSha256": "hXvfC1uLybiLoqFIxtDeoHt7sSewLBaYxe55ECrjVbY="
       }
     },
     "ApiGatewayRestApi": {
@@ -241,6 +242,55 @@
           "Ref": "ApiGatewayRestApi"
         }
       }
+    },
+    "ApiGatewayMethodAny": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "ANY",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ApiLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "ApiLambdaPermissionApiGateway"
+      ]
     },
     "ApiGatewayMethodProxyVarAny": {
       "Type": "AWS::ApiGateway::Method",
@@ -273,7 +323,7 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "AppLambdaFunction",
+                    "ApiLambdaFunction",
                     "Arn"
                   ]
                 },
@@ -285,10 +335,10 @@
         "MethodResponses": []
       },
       "DependsOn": [
-        "AppLambdaPermissionApiGateway"
+        "ApiLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1651026528133": {
+    "ApiGatewayDeployment1652273135295": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -297,15 +347,16 @@
         "StageName": "dev"
       },
       "DependsOn": [
+        "ApiGatewayMethodAny",
         "ApiGatewayMethodProxyVarAny"
       ]
     },
-    "AppLambdaPermissionApiGateway": {
+    "ApiLambdaPermissionApiGateway": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
           "Fn::GetAtt": [
-            "AppLambdaFunction",
+            "ApiLambdaFunction",
             "Arn"
           ]
         },
@@ -358,25 +409,25 @@
     },
     "PythonRequirementsLambdaLayerHash": {
       "Description": "Current Lambda layer hash",
-      "Value": "b16c604492ae11c97bf8a7975fc665f27fe8cb7b",
+      "Value": "d1a120e566dc03e6e4cc7950865e01daa27c3b1c",
       "Export": {
         "Name": "sls-wicket-fastapi-dev-PythonRequirementsLambdaLayerHash"
       }
     },
     "PythonRequirementsLambdaLayerS3Key": {
       "Description": "Current Lambda layer S3Key",
-      "Value": "serverless/wicket-fastapi/dev/1651025010497-2022-04-27T02:03:30.497Z/pythonRequirements.zip",
+      "Value": "serverless/wicket-fastapi/dev/1652211160891-2022-05-10T19:32:40.891Z/pythonRequirements.zip",
       "Export": {
         "Name": "sls-wicket-fastapi-dev-PythonRequirementsLambdaLayerS3Key"
       }
     },
-    "AppLambdaFunctionQualifiedArn": {
+    "ApiLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "AppLambdaVersionQgXUo9fFpg116LmRNsKYIqKRol44P18oeLBkE8hkbE"
+        "Ref": "ApiLambdaVersionrazGLHg2aNvxPbVe2KmcVGts2H5EI4ZuFO8JhzG8"
       },
       "Export": {
-        "Name": "sls-wicket-fastapi-dev-AppLambdaFunctionQualifiedArn"
+        "Name": "sls-wicket-fastapi-dev-ApiLambdaFunctionQualifiedArn"
       }
     },
     "ServiceEndpoint": {

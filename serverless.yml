@@ -21,7 +21,7 @@ custom:
         - python3.8
 
 functions:
-  app:
+  api:
     package:
       patterns:
         - "main.py"
@@ -35,8 +35,12 @@ functions:
     environment:
       STAGE: ${self:provider.stage}
     layers:
+      - ${cf:psycopg239-layer-dev.Psycopg239LayerExport}
       - { Ref: PythonRequirementsLambdaLayer }
     events:
+      - http:
+          method: any
+          path: /
       - http:
           method: any
           path: /{proxy+}

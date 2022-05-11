@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 from api import schemas
 from api.dependencies import has_access
 
-router = APIRouter()
+router = APIRouter(prefix="/admin", tags=["admin"], dependencies=[Depends(has_access)])
 
 
 @router.get("/hello/")

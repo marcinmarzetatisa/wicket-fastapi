@@ -1,0 +1,16 @@
+service: psycopg239-layer
+provider:
+  name: aws
+  runtime: python3.9
+  stage: dev
+  region: eu-central-1
+layers:
+  psycopg239:
+    path: layer
+resources:
+  Outputs:
+    Psycopg239LayerExport:
+      Value:
+        Ref: Psycopg239LambdaLayer
+      Export:
+        Name: Psycopg239LambdaLayer
