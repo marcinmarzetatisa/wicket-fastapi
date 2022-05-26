@@ -5,12 +5,16 @@ package:
 
 provider:
   name: aws
-  runtime: python3.8
+  runtime: python3.9
   region: eu-central-1
   stage: ${opt:stage, "dev"}
+  layers:
+    - ${cf:dbutils-layer-dev.DbutilsLayerExport}
+    - { Ref: PythonRequirementsLambdaLayer }
 
 plugins:
   - serverless-python-requirements
+  - serverless-domain-manager
 
 custom:
   pythonRequirements:
@@ -18,7 +22,16 @@ custom:
       name: requirements-layer
       description: Requirements
       compatibleRuntimes:
-        - python3.8
+        - python3.9
+#  customDomain:
+#    domainName: YOUR_DOMAIN_HERE
+#    stage: ${self:provider.stage}
+#    certificateArn: YOUR_CERTIFICATE_ARN_HERE
+#    endpointType: "edge"
+#    securityPolicy: tls_1_2
+#    apiType: rest
+#    autoDomain: true
+#    autoDomainWaitFor: 120
 
 functions:
   api:
@@ -29,14 +42,12 @@ functions:
         - "!package.json"
         - "!package-lock.json"
         - "!.serverless/**"
-        - "!.virtualenv/**"
+        - "!.venv/**"
         - "!node_modules/**"
+        - "!layers/**"
     handler: main.handler
     environment:
       STAGE: ${self:provider.stage}
-    layers:
-      - ${cf:psycopg239-layer-dev.Psycopg239LayerExport}
-      - { Ref: PythonRequirementsLambdaLayer }
     events:
       - http:
           method: any

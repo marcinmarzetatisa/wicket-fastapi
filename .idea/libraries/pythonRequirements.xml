@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="pythonRequirements">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/.serverless/pythonRequirements.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

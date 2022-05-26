@@ -2,7 +2,7 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
-    secret_key: str
+    public_key: str
     sqlalchemy_url: str
     access_token_expire_minutes: int = 60 * 24 * 8
     super_user_email: str = "admin@example.com"

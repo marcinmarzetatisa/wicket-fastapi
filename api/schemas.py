@@ -117,14 +117,24 @@ class Token(BaseModel):
     token_type: str
 
 
+class TokenAbilities(BaseModel):
+    auth: Optional[dict]
+    brisk: Optional[dict]
+    umpire: Optional[dict]
+    wicket: Optional[dict]
+
+
+class TokenClient(BaseModel):
+    id: int
+    name: str
+    language: str
+
+
 class TokenPayload(BaseModel):
-    id: str
-    first_name: str
-    last_name: str
+    id: int
+    full_name: str
     email: str
-    products_name: List[str]
-    status: str
-    role_ids: List[int]
-    abilities: dict
+    abilities: TokenAbilities
+    client: TokenClient
     exp: datetime
-    sub: Optional[int]
+

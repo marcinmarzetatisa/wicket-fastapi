@@ -160,3 +160,22 @@ cython_debug/
 #.idea/
 
 .serverless/
+# Distribution / packaging
+*.pyc
+
+# Serverless directories
+.serverless
+psycopg2
+
+.idea
+/gen/
+/node_modules/
+/apis/admin/node_modules/
+
+.env/
+/docs/node_modules/
+/apis/payments/node_modules/
+/apis/payments/temp/
+/misc/layers/wkhtmltox-layer/layer/
+/misc/layers/bcrypt-layer/layer/
+/misc/layers/psycopg2-layer/layer/

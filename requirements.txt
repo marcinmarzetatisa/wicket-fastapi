@@ -6,7 +6,6 @@ python-multipart~=0.0.5
 python-dotenv
 requests~=2.27.1
 
-pydantic~=1.9.0
 jose~=1.0.0
 h11~=0.13.0
 anyio~=3.5.0
@@ -29,4 +28,3 @@ certifi~=2021.10.8
 idna~=3.3
 urllib3~=1.26.9
 pycparser~=2.21
-SQLAlchemy~=1.4.36

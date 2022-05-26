@@ -1,0 +1,16 @@
+service: dbutils-layer
+provider:
+  name: aws
+  runtime: python3.9
+  stage: dev
+  region: eu-central-1
+layers:
+  dbutils:
+    path: layer
+resources:
+  Outputs:
+    DbutilsLayerExport:
+      Value:
+        Ref: DbutilsLambdaLayer
+      Export:
+        Name: DbutilsLambdaLayer

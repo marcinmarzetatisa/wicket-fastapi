@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="layer">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/layers/psycopg2_39-layer/layer.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

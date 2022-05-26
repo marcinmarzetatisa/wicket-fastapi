@@ -6,9 +6,15 @@
     },
     "provider": {
       "name": "aws",
-      "runtime": "python3.8",
+      "runtime": "python3.9",
       "region": "eu-central-1",
       "stage": "dev",
+      "layers": [
+        "arn:aws:lambda:eu-central-1:188557514665:layer:dbutils:1",
+        {
+          "Ref": "PythonRequirementsLambdaLayer"
+        }
+      ],
       "versionFunctions": true,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
@@ -173,12 +179,12 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/wicket-fastapi/dev/1652211160891-2022-05-10T19:32:40.891Z/pythonRequirements.zip"
+                "S3Key": "serverless/wicket-fastapi/dev/1652307152259-2022-05-11T22:12:32.259Z/pythonRequirements.zip"
               },
               "LayerName": "requirements-layer",
               "Description": "Requirements",
               "CompatibleRuntimes": [
-                "python3.8"
+                "python3.9"
               ]
             }
           },
@@ -189,10 +195,10 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/wicket-fastapi/dev/1652273138077-2022-05-11T12:45:38.077Z/api.zip"
+                "S3Key": "serverless/wicket-fastapi/dev/1652863727486-2022-05-18T08:48:47.486Z/api.zip"
               },
               "Handler": "main.handler",
-              "Runtime": "python3.8",
+              "Runtime": "python3.9",
               "FunctionName": "wicket-fastapi-dev-api",
               "MemorySize": 1024,
               "Timeout": 6,
@@ -208,9 +214,9 @@
                 ]
               },
               "Layers": [
-                "arn:aws:lambda:eu-central-1:188557514665:layer:psycopg239:2",
+                "arn:aws:lambda:eu-central-1:188557514665:layer:dbutils:1",
                 {
-                  "Ref": "PythonRequirementsLambdaLayer"
+                  "$ref": "$[\"service\"][\"provider\"][\"layers\"][1]"
                 }
               ]
             },
@@ -218,14 +224,14 @@
               "ApiLogGroup"
             ]
           },
-          "ApiLambdaVersionrazGLHg2aNvxPbVe2KmcVGts2H5EI4ZuFO8JhzG8": {
+          "ApiLambdaVersionIC4w5jfvbZzdJ9iFYX8Q0u2w6m9ZAy3nJb5CIbfo": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ApiLambdaFunction"
               },
-              "CodeSha256": "hXvfC1uLybiLoqFIxtDeoHt7sSewLBaYxe55ECrjVbY="
+              "CodeSha256": "ns6MMw6ueIHiVUITI8Bv2dIxqavEzxZ7V09BqR8bZHs="
             }
           },
           "ApiGatewayRestApi": {
@@ -350,7 +356,7 @@
               "ApiLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1652273135295": {
+          "ApiGatewayDeployment1652863721024": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -421,14 +427,14 @@
           },
           "PythonRequirementsLambdaLayerHash": {
             "Description": "Current Lambda layer hash",
-            "Value": "d1a120e566dc03e6e4cc7950865e01daa27c3b1c",
+            "Value": "b72765b8089903a830bd86529023294a88b85f46",
             "Export": {
               "Name": "sls-wicket-fastapi-dev-PythonRequirementsLambdaLayerHash"
             }
           },
           "PythonRequirementsLambdaLayerS3Key": {
             "Description": "Current Lambda layer S3Key",
-            "Value": "serverless/wicket-fastapi/dev/1652211160891-2022-05-10T19:32:40.891Z/pythonRequirements.zip",
+            "Value": "serverless/wicket-fastapi/dev/1652307152259-2022-05-11T22:12:32.259Z/pythonRequirements.zip",
             "Export": {
               "Name": "sls-wicket-fastapi-dev-PythonRequirementsLambdaLayerS3Key"
             }
@@ -436,7 +442,7 @@
           "ApiLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ApiLambdaVersionrazGLHg2aNvxPbVe2KmcVGts2H5EI4ZuFO8JhzG8"
+              "Ref": "ApiLambdaVersionIC4w5jfvbZzdJ9iFYX8Q0u2w6m9ZAy3nJb5CIbfo"
             },
             "Export": {
               "Name": "sls-wicket-fastapi-dev-ApiLambdaFunctionQualifiedArn"
@@ -578,17 +584,15 @@
             "!package.json",
             "!package-lock.json",
             "!.serverless/**",
-            "!.virtualenv/**",
-            "!node_modules/**"
+            "!.venv/**",
+            "!node_modules/**",
+            "!layers/**"
           ],
-          "artifact": "/Users/mm/IdeaProjects/wicket-fastapi/.serverless/api.zip"
+          "artifact": "/Users/mm/Sites/wicket-fastapi/.serverless/api.zip"
         },
         "handler": "main.handler",
         "environment": {
           "STAGE": "dev"
-        },
-        "layers": {
-          "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"ApiLambdaFunction\"][\"Properties\"][\"Layers\"]"
         },
         "events": [
           {
@@ -610,9 +614,9 @@
         "module": ".",
         "memory": 1024,
         "timeout": 6,
-        "runtime": "python3.8",
+        "runtime": "python3.9",
         "vpc": {},
-        "versionLogicalId": "ApiLambdaVersionrazGLHg2aNvxPbVe2KmcVGts2H5EI4ZuFO8JhzG8"
+        "versionLogicalId": "ApiLambdaVersionIC4w5jfvbZzdJ9iFYX8Q0u2w6m9ZAy3nJb5CIbfo"
       }
     },
     "configValidationMode": "warn",
@@ -622,7 +626,7 @@
       "package": {
         "individually": true,
         "artifactsS3KeyDirname": "serverless/wicket-fastapi/dev/code-artifacts",
-        "artifactDirectoryName": "serverless/wicket-fastapi/dev/1652273138077-2022-05-11T12:45:38.077Z"
+        "artifactDirectoryName": "serverless/wicket-fastapi/dev/1652863727486-2022-05-18T08:48:47.486Z"
       },
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
@@ -653,7 +657,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/wicket-fastapi/dev/1652273138077-2022-05-11T12:45:38.077Z",
+    "artifactDirectoryName": "serverless/wicket-fastapi/dev/1652863727486-2022-05-18T08:48:47.486Z",
     "artifact": ""
   }
 }
