@@ -28,7 +28,7 @@ router = APIRouter(prefix="/admin", tags=["admin"], dependencies=[AUTH_TOKEN])
 #     return response
 
 
-@router.get("/abilities/wicket" )
+@router.get("/abilities/wicket")
 def get_wicket_permissions(abilities: dict = AUTH_TOKEN):
     return "Access granted"
 

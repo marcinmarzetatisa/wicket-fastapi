@@ -1,4 +1,7 @@
-from sqlalchemy import Boolean, Column, Integer, String, Text
+from typing import List
+
+from sqlalchemy import ARRAY, Boolean, Column, DateTime, ForeignKey, Integer, String, Text, func, text
+from sqlalchemy.orm import relationship
 
 from .database import Base
 
@@ -76,3 +79,40 @@ class UserType(Base):
     id = Column(Integer, primary_key=True, index=True, nullable=False)
     label_pl = Column(String)
     code = Column(String(50), nullable=False)
+
+
+class FanUserData(Base):
+    __tablename__ = "fan_user_data"
+
+    id = Column(Integer, primary_key=True, nullable=False)
+    fk_fan_id = Column(
+        Integer, ForeignKey("fan_user.fan_id"), index=True, nullable=False
+    )
+    fk_dict_user_data_type_id = Column(
+        Integer, ForeignKey(UserDataType.id), nullable=False
+    )
+    data_value = Column(String)
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+
+    data_type: UserDataType = relationship(UserDataType, backref="users", lazy="joined")
+
+
+class User(Base):
+    __tablename__ = "fan_user"
+
+    fan_id = Column(Integer, primary_key=True, unique=True, nullable=False)
+    fan_sub = Column(String(50), unique=True, index=True, nullable=False)
+    created_at = Column(DateTime, server_default=func.now())
+    email_verified = Column(Boolean, default=False)
+    status = Column(String(50))
+    redirect_url = Column(Text)
+    for_integration = Column(
+        ARRAY(Integer), server_default=text("'{}'::integer[]")
+    )
+    fk_invitation_code = Column(
+        Integer, ForeignKey("invitation.invitation_id")
+    )
+
+    data: List[FanUserData] = relationship(
+        "FanUserData", backref="fk_fan", lazy="joined"
+    )

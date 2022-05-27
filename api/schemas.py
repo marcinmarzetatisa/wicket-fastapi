@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, Union
 
 from pydantic import BaseModel
 
@@ -44,7 +44,7 @@ class DataProcessingPurposeResponse(BaseModel):
     data: List[DataProcessingPurposeItem]
 
 
-class UserDataTypeItem(BaseModel):
+class UserDataType(BaseModel):
     id: int
     user_data_meta_name: str
     user_data_label_pl: str
@@ -65,7 +65,24 @@ class UserDataTypeItem(BaseModel):
 
 class UserDataTypeResponse(BaseModel):
     status: int = 200
-    data: List[UserDataTypeItem]
+    data: List[UserDataType]
+
+
+class Filter(BaseModel):
+    id: int
+    user_data_meta_name: str
+    user_data_label_pl: str
+    data_standard_description: Optional[str] = None
+    admin_order: int
+    data_values: Union[List, None]
+
+    class Config:
+        orm_mode = True
+
+
+class FiltersResponse(BaseModel):
+    status: int = 200
+    data: List[Filter]
 
 
 class UserTypeItem(BaseModel):
